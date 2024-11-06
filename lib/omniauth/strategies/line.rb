@@ -41,6 +41,14 @@ module OmniAuth
         raise ::Timeout::Error
       end
 
+      def authorize_params
+        super.tap do |params|
+          # Only include specified parameters, ignoring any additional ones.
+          %i[scope bot_prompt].each do |key|
+            params[key] = options[key] if options[key]
+          end
+        end
+      end
     end
   end
 end
